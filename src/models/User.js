@@ -3,56 +3,59 @@ import bcryptjs from 'bcryptjs';
 
 export default class User extends Model {
   static init(sequelize) {
-    super.init({
-      nome: {
-        type: Sequelize.STRING,
-        defaultValue: '',
-        validate: {
-          len: {
-            args: [3, 255],
-            msg: 'Campo nome deve ter entre 3 e 255 caracteres'
+    super.init(
+      {
+        name: {
+          type: Sequelize.STRING,
+          defaultValue: '',
+          validate: {
+            len: {
+              args: [3, 255],
+              msg: 'Name must be between 3 and 255 characters',
+            },
           },
-        }
-      },
-      email: {
-        type: Sequelize.STRING,
-        defaultValue: '',
-        validate: {
-          isEmail: {
-            msg: 'Email inválido'
-          },
+        },
+        email: {
+          type: Sequelize.STRING,
+          defaultValue: '',
+          validate: {
+            isEmail: {
+              msg: 'Invalid email',
+            },
 
-          isUnique(value, next) {
-            User.findOne({ where: {email: value }}).then(user => {
-              if(user) {
-                return next('Email já existe, tente outro!');
-              };
-              return next();
-            }).catch(err => next(err));
+            isUnique(value, next) {
+              User.findOne({ where: { email: value } })
+                .then((user) => {
+                  if (user) {
+                    return next('Email already registered');
+                  }
+                  return next();
+                })
+                .catch((err) => next(err));
+            },
           },
+        },
 
+        password_hash: {
+          type: Sequelize.STRING,
+          defaultValue: '',
+        },
+
+        password: {
+          type: Sequelize.VIRTUAL,
+          defaultValue: '',
+          validate: {
+            len: {
+              args: [6, 50],
+              msg: 'Password must be between 6 and 50 characters long',
+            },
+          },
         },
       },
-
-      password_hash: {
-        type: Sequelize.STRING,
-        defaultValue: '',
+      {
+        sequelize,
       },
-
-      password: {
-        type: Sequelize.VIRTUAL,
-        defaultValue: '',
-        validate: {
-          len: {
-            args: [6, 50],
-            msg: 'A senha precisa ter entre 6 e 50 caracteres',
-          },
-        }
-      },
-
-    }, {
-      sequelize,
-    });
+    );
 
     this.addHook('beforeSave', async user => {
       if (user.password) {
