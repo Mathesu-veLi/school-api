@@ -1,13 +1,13 @@
 import dotenv from 'dotenv';
 import express from 'express';
-import {resolve} from 'path';
+import { resolve } from 'path';
 //import cors from 'cors';
 //import helmet from 'helmet';
 
 import homeRoutes from './routes/homeRoutes';
 import userRoutes from './routes/userRoutes';
 import tokenRoutes from './routes/tokenRoutes';
-import alunoRoutes from './routes/alunoRoutes';
+import studentRoutes from './routes/studentRoutes';
 import photoRoutes from './routes/photoRoutes';
 
 dotenv.config();
@@ -15,14 +15,14 @@ dotenv.config();
 import './database';
 
 const corsOptions = {
-  origin: function(origin, callback) {
-    if(!origin) {
+  origin: function (origin, callback) {
+    if (!origin) {
       callback(null, true);
     } else {
-      callback(new Error("Not allowed by CORS"));
+      callback(new Error('Not allowed by CORS'));
     }
-  }
-}
+  },
+};
 
 class App {
   constructor() {
@@ -43,7 +43,7 @@ class App {
     this.app.use('/', homeRoutes);
     this.app.use('/users/', userRoutes);
     this.app.use('/tokens', tokenRoutes);
-    this.app.use('/alunos', alunoRoutes);
+    this.app.use('/students', studentRoutes);
     this.app.use('/photos', photoRoutes);
   }
 }

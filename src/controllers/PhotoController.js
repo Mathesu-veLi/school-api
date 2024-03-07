@@ -16,8 +16,12 @@ class PhotoController {
 
       try {
         const { originalname, filename } = req.file;
-        const { aluno_id } = req.body;
-        const photo = await Photo.create({ originalname, filename, aluno_id });
+        const { student_id } = req.body;
+        const photo = await Photo.create({
+          originalname,
+          filename,
+          student_id,
+        });
 
         return res.json(photo);
       } catch (e) {
@@ -39,10 +43,10 @@ class PhotoController {
       try {
         const photo = await Photo.findOne({
           where: {
-            aluno_id: req.body.aluno_id,
+            student_id: req.body.student_id,
           },
         });
-        const aluno_id = req.body.aluno_id;
+        const student_id = req.body.student_id;
         const oldOriginalName = req.file.originalname;
         const oldFilename = req.file.filename;
 
@@ -52,7 +56,7 @@ class PhotoController {
         });
         const { originalname, filename } = photoAtualizada;
 
-        return res.json({ originalname, filename, aluno_id });
+        return res.json({ originalname, filename, student_id });
       } catch (e) {
         console.log(e);
         return res.status(400).json({
@@ -72,7 +76,7 @@ class PhotoController {
       try {
         const photo = await Photo.findOne({
           where: {
-            aluno_id: req.body.aluno_id,
+            student_id: req.body.student_id,
           },
         });
         await photo.destroy();

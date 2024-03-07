@@ -1,42 +1,52 @@
-"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }var _sequelize = require('sequelize'); var _sequelize2 = _interopRequireDefault(_sequelize);
-var _appConfig = require('../config/appConfig'); var _appConfig2 = _interopRequireDefault(_appConfig);
+'use strict';
+Object.defineProperty(exports, '__esModule', { value: true });
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+var _sequelize = require('sequelize');
+var _sequelize2 = _interopRequireDefault(_sequelize);
+var _appConfig = require('../config/appConfig');
+var _appConfig2 = _interopRequireDefault(_appConfig);
 
- class Photo extends _sequelize.Model {
+class Photo extends _sequelize.Model {
   static init(sequelize) {
-    super.init({
-      originalname: {
-        type: _sequelize2.default.STRING,
-        defaultValue: '',
-        validade: {
-          notEmpty: {
-            msg: 'Campo não pode ficar vazio'
+    super.init(
+      {
+        originalname: {
+          type: _sequelize2.default.STRING,
+          defaultValue: '',
+          validade: {
+            notEmpty: {
+              msg: 'Campo não pode ficar vazio',
+            },
+          },
+        },
+
+        filename: {
+          type: _sequelize2.default.STRING,
+          defaultValue: '',
+          validade: {
+            notEmpty: {
+              msg: 'Campo não pode ficar vazio',
+            },
+          },
+        },
+        url: {
+          type: _sequelize2.default.VIRTUAL,
+          get() {
+            return `/images/${this.getDataValue('filename')}`;
           },
         },
       },
-
-      filename: {
-        type: _sequelize2.default.STRING,
-        defaultValue: '',
-        validade: {
-          notEmpty: {
-            msg: 'Campo não pode ficar vazio'
-          },
-        },
+      {
+        sequelize,
+        tableName: 'photos',
       },
-      url: {
-        type: _sequelize2.default.VIRTUAL,
-        get() {
-          return `/images/${this.getDataValue('filename')}`
-        }
-      }
-
-    }, {
-      sequelize,
-      tableName: 'photos'
-    });
-  };
+    );
+  }
 
   static associate(models) {
-    this.belongsTo(models.Aluno, { foreignKey: 'aluno_id' });
+    this.belongsTo(models.Student, { foreignKey: 'student_id' });
   }
-} exports.default = Photo;
+}
+exports.default = Photo;

@@ -1,18 +1,36 @@
-"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }var _Aluno = require('../models/Aluno'); var _Aluno2 = _interopRequireDefault(_Aluno);
-var _Photo = require('../models/Photo'); var _Photo2 = _interopRequireDefault(_Photo);
+'use strict';
+Object.defineProperty(exports, '__esModule', { value: true });
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+var _Student = require('../models/Student');
+var _Student2 = _interopRequireDefault(_Student);
+var _Photo = require('../models/Photo');
+var _Photo2 = _interopRequireDefault(_Photo);
 
-class AlunoController {
+class StudentController {
   async index(req, res) {
-    const alunos = await _Aluno2.default.findAll({
-      attributes: ['id', 'nome', 'sobrenome', 'email', 'idade', 'peso', 'altura'],
-      order: [['id', 'DESC'], [_Photo2.default, 'id', 'DESC']],
+    const students = await _Student2.default.findAll({
+      attributes: [
+        'id',
+        'nome',
+        'sobrenome',
+        'email',
+        'idade',
+        'peso',
+        'altura',
+      ],
+      order: [
+        ['id', 'DESC'],
+        [_Photo2.default, 'id', 'DESC'],
+      ],
       include: {
         model: _Photo2.default,
-        attributes: ['url', 'filename']
-      }
+        attributes: ['url', 'filename'],
+      },
     });
-    return res.json(alunos);
-  };
+    return res.json(students);
+  }
 
   async show(req, res) {
     try {
@@ -21,44 +39,54 @@ class AlunoController {
         return res.status(400).json({
           errors: ['Faltando ID'],
         });
-      };
+      }
 
-      const aluno = await _Aluno2.default.findByPk(id, {
-        attributes: ['id', 'nome', 'sobrenome', 'email', 'idade', 'peso', 'altura'],
-        order: [['id', 'DESC'], [_Photo2.default, 'id', 'DESC']],
+      const student = await _Student2.default.findByPk(id, {
+        attributes: [
+          'id',
+          'nome',
+          'sobrenome',
+          'email',
+          'idade',
+          'peso',
+          'altura',
+        ],
+        order: [
+          ['id', 'DESC'],
+          [_Photo2.default, 'id', 'DESC'],
+        ],
         include: {
           model: _Photo2.default,
-          attributes: ['url', 'filename']
-        }
+          attributes: ['url', 'filename'],
+        },
       });
 
-      if (!aluno) {
+      if (!student) {
         return res.status(400).json({
-          errors: ['Aluno não existe'],
+          errors: ['Student não existe'],
         });
-      };
+      }
 
-
-      return res.json(aluno);
+      return res.json(student);
     } catch (e) {
       return res.status(400).json({
-        errors: e.errors.map(err => err.message)
+        errors: e.errors.map((err) => err.message),
       });
-    };
-  };
+    }
+  }
 
   async store(req, res) {
     try {
-      const aluno = await _Aluno2.default.create(req.body, req.userId)
-      const { id, nome, sobrenome, email, idade, peso, altura } = aluno
+      const student = await _Student2.default.create(req.body, req.userId);
+      const { id, nome, sobrenome, email, idade, peso, altura } = student;
 
-      return res.json({ id, nome, sobrenome, email, idade, peso, altura })
+      return res.json({ id, nome, sobrenome, email, idade, peso, altura });
     } catch (e) {
       return res.status(400).json({
-        errors: e.errors.map(err => err.message)
+        errors: e.errors.map((err) => err.message),
       });
     }
-  };
+  }
 
   async update(req, res) {
     try {
@@ -67,26 +95,26 @@ class AlunoController {
         return res.status(400).json({
           errors: ['Faltando ID'],
         });
-      };
+      }
 
-      const aluno = await _Aluno2.default.findByPk(id);
+      const student = await _Student2.default.findByPk(id);
 
-      if (!aluno) {
+      if (!student) {
         return res.status(400).json({
-          errors: ['Aluno não existe'],
+          errors: ['Student não existe'],
         });
-      };
+      }
 
-      const alunoAtualizado = await aluno.update(req.body);
-      const { nome, sobrenome, email, idade, peso, altura } = alunoAtualizado;
+      const studentAtualizado = await student.update(req.body);
+      const { nome, sobrenome, email, idade, peso, altura } = studentAtualizado;
 
       return res.json({ nome, sobrenome, email, idade, peso, altura });
     } catch (e) {
       return res.status(400).json({
-        errors: e.errors.map(err => err.message)
+        errors: e.errors.map((err) => err.message),
       });
-    };
-  };
+    }
+  }
 
   async delete(req, res) {
     try {
@@ -95,24 +123,24 @@ class AlunoController {
         return res.status(400).json({
           errors: ['Faltando ID'],
         });
-      };
+      }
 
-      const aluno = await _Aluno2.default.findByPk(id);
+      const student = await _Student2.default.findByPk(id);
 
-      if (!aluno) {
+      if (!student) {
         return res.status(400).json({
-          errors: ['Aluno não existe'],
+          errors: ['Student não existe'],
         });
-      };
+      }
 
-      await aluno.destroy();
-      return res.json('Aluno deletado com sucesso');
+      await student.destroy();
+      return res.json('Student deletado com sucesso');
     } catch (e) {
       return res.status(400).json({
-        errors: e.errors.map(err => err.message)
+        errors: e.errors.map((err) => err.message),
       });
-    };
-  };
-};
+    }
+  }
+}
 
-exports. default = new AlunoController();
+exports.default = new StudentController();

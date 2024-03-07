@@ -1,4 +1,5 @@
-"use strict";/** @type {import('sequelize-cli').Migration} */
+'use strict';
+/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   up(queryInterface, Sequelize) {
     return queryInterface.createTable('photos', {
@@ -6,36 +7,36 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
-        primaryKey: true
+        primaryKey: true,
       },
       originalname: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       filename: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
-      aluno_id: {
+      student_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'alunos',
+          model: 'students',
           key: 'id',
         },
         onDelete: 'CASCADE',
-        onUpdate: 'CASCADE'
+        onUpdate: 'CASCADE',
       },
       created_at: {
         type: Sequelize.DATE,
-        allowNull: false
+        allowNull: false,
       },
       updated_at: {
         type: Sequelize.DATE,
-        allowNull: false
-      }
+        allowNull: false,
+      },
     });
   },
 
-  down: (queryInterface) => queryInterface.dropTable('photos')
+  down: (queryInterface) => queryInterface.dropTable('photos'),
 };
