@@ -1,9 +1,9 @@
-import Aluno from '../models/Aluno';
+import Student from '../models/Student';
 import Photo from '../models/Photo';
 
 class StudentController {
   async index(req, res) {
-    const students = await Aluno.findAll({
+    const students = await Student.findAll({
       attributes: ['id', 'name', 'lastName', 'email', 'age', 'weight', 'height'],
       order: [['id', 'DESC'], [Photo, 'id', 'DESC']],
       include: {
@@ -23,7 +23,7 @@ class StudentController {
         });
       };
 
-      const student = await Aluno.findByPk(id, {
+      const student = await Student.findByPk(id, {
         attributes: ['id', 'name', 'lastname', 'email', 'age', 'weight', 'height'],
         order: [['id', 'DESC'], [Photo, 'id', 'DESC']],
         include: {
@@ -49,7 +49,7 @@ class StudentController {
 
   async store(req, res) {
     try {
-      const student = await Aluno.create(req.body, req.userId)
+      const student = await Student.create(req.body, req.userId)
       const { id, name, lastname, email, age, weight, height } = student
 
       return res.json({ id, name, lastname, email, age, weight, height })
@@ -69,7 +69,7 @@ class StudentController {
         });
       };
 
-      const student = await Aluno.findByPk(id);
+      const student = await Student.findByPk(id);
 
       if (!student) {
         return res.status(400).json({
@@ -97,7 +97,7 @@ class StudentController {
         });
       };
 
-      const student = await Aluno.findByPk(id);
+      const student = await Student.findByPk(id);
 
       if (!student) {
         return res.status(400).json({
