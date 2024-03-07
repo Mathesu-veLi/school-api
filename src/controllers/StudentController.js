@@ -3,15 +3,15 @@ import Photo from '../models/Photo';
 
 class StudentController {
   async index(req, res) {
-    const alunos = await Aluno.findAll({
-      attributes: ['id', 'nome', 'sobrenome', 'email', 'idade', 'peso', 'altura'],
+    const students = await Aluno.findAll({
+      attributes: ['id', 'name', 'lastName', 'email', 'age', 'weight', 'height'],
       order: [['id', 'DESC'], [Photo, 'id', 'DESC']],
       include: {
         model: Photo,
         attributes: ['url', 'filename']
       }
     });
-    return res.json(alunos);
+    return res.json(students);
   };
 
   async show(req, res) {
@@ -19,12 +19,12 @@ class StudentController {
       const { id } = req.params;
       if (!id) {
         return res.status(400).json({
-          errors: ['Faltando ID'],
+          errors: ['ID not submitted'],
         });
       };
 
-      const aluno = await Aluno.findByPk(id, {
-        attributes: ['id', 'nome', 'sobrenome', 'email', 'idade', 'peso', 'altura'],
+      const student = await Aluno.findByPk(id, {
+        attributes: ['id', 'name', 'lastname', 'email', 'age', 'weight', 'height'],
         order: [['id', 'DESC'], [Photo, 'id', 'DESC']],
         include: {
           model: Photo,
@@ -32,14 +32,14 @@ class StudentController {
         }
       });
 
-      if (!aluno) {
+      if (!student) {
         return res.status(400).json({
-          errors: ['Aluno não existe'],
+          errors: ['Student does not exist'],
         });
       };
 
 
-      return res.json(aluno);
+      return res.json(student);
     } catch (e) {
       return res.status(400).json({
         errors: e.errors.map(err => err.message)
@@ -49,10 +49,10 @@ class StudentController {
 
   async store(req, res) {
     try {
-      const aluno = await Aluno.create(req.body, req.userId)
-      const { id, nome, sobrenome, email, idade, peso, altura } = aluno
+      const student = await Aluno.create(req.body, req.userId)
+      const { id, name, lastname, email, age, weight, height } = student
 
-      return res.json({ id, nome, sobrenome, email, idade, peso, altura })
+      return res.json({ id, name, lastname, email, age, weight, height })
     } catch (e) {
       return res.status(400).json({
         errors: e.errors.map(err => err.message)
@@ -65,22 +65,22 @@ class StudentController {
       const { id } = req.params;
       if (!id) {
         return res.status(400).json({
-          errors: ['Faltando ID'],
+          errors: ['ID not submitted'],
         });
       };
 
-      const aluno = await Aluno.findByPk(id);
+      const student = await Aluno.findByPk(id);
 
-      if (!aluno) {
+      if (!student) {
         return res.status(400).json({
-          errors: ['Aluno não existe'],
+          errors: ['Student does not exist'],
         });
       };
 
-      const alunoAtualizado = await aluno.update(req.body);
-      const { nome, sobrenome, email, idade, peso, altura } = alunoAtualizado;
+      const updatedStudent = await student.update(req.body);
+      const { name, lastname, email, age, weight, height } = updatedStudent;
 
-      return res.json({ nome, sobrenome, email, idade, peso, altura });
+      return res.json({ name, lastname, email, age, weight, height });
     } catch (e) {
       return res.status(400).json({
         errors: e.errors.map(err => err.message)
@@ -93,20 +93,20 @@ class StudentController {
       const { id } = req.params;
       if (!id) {
         return res.status(400).json({
-          errors: ['Faltando ID'],
+          errors: ['ID not submitted'],
         });
       };
 
-      const aluno = await Aluno.findByPk(id);
+      const student = await Aluno.findByPk(id);
 
-      if (!aluno) {
+      if (!student) {
         return res.status(400).json({
-          errors: ['Aluno não existe'],
+          errors: ['Student does not exist'],
         });
       };
 
-      await aluno.destroy();
-      return res.json('Aluno deletado com sucesso');
+      await student.destroy();
+      return res.json('Student successfully deleted');
     } catch (e) {
       return res.status(400).json({
         errors: e.errors.map(err => err.message)
