@@ -8,7 +8,7 @@ const randInt = () => Math.floor(Math.random() * 10000 + 10000)
 export default {
   fileFilter: (req, file, cb) => {
     if(file.mimetype !== 'image/png' && file.mimetype !== 'image/jpeg') {
-      return cb(new multer.MulterError('Arquivo precisa ser png ou jpg'));
+      return cb(new multer.MulterError('File must be png or jpg'));
     }
 
     return cb(null, true)
