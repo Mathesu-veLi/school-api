@@ -23,7 +23,7 @@ class PhotoController {
       } catch (e) {
         console.log(e);
         return res.status(400).json({
-          errors: ['ID do aluno não existe'],
+          errors: ['Student ID does not exist'],
         });
       }
     });
@@ -43,12 +43,12 @@ class PhotoController {
           },
         });
         const aluno_id = req.body.aluno_id;
-        const originalnameAntigo = req.file.originalname;
-        const filenameAntigo = req.file.filename;
+        const oldOriginalName = req.file.originalname;
+        const oldFilename = req.file.filename;
 
         const photoAtualizada = await photo.update({
-          originalname: originalnameAntigo,
-          filename: filenameAntigo,
+          originalname: oldOriginalName,
+          filename: oldFilename,
         });
         const { originalname, filename } = photoAtualizada;
 
@@ -56,7 +56,7 @@ class PhotoController {
       } catch (e) {
         console.log(e);
         return res.status(400).json({
-          errors: ['ID do aluno não existe'],
+          errors: ['Student ID does not exist'],
         });
       }
     });
@@ -76,11 +76,11 @@ class PhotoController {
           },
         });
         await photo.destroy();
-        return res.json('Foto deletada com sucesso');
+        return res.json('Photo successfully deleted');
       } catch (e) {
         console.log(e);
         return res.status(400).json({
-          errors: ['ID do aluno não existe'],
+          errors: ['Student id does not exist'],
         });
       }
     });
