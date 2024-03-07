@@ -13,8 +13,8 @@ export default async (req, res, next) => {
   const [, token] = authorization.split(" ");
 
   try {
-    const dados = jwt.verify(token, process.env.TOKEN_SECRET);
-    const {id, email} = dados;
+    const data = jwt.verify(token, process.env.TOKEN_SECRET);
+    const {id, email} = data;
     const user = await User.findOne({
       where: {
         id,
@@ -23,7 +23,7 @@ export default async (req, res, next) => {
     });
     if (!user) {
       return res.status(401).json({
-        errors: ['Usuário inválido'],
+        errors: ['Invalid user'],
       })
     }
     req.userId = id;
@@ -32,7 +32,7 @@ export default async (req, res, next) => {
     return next();
   } catch(e) {
     return res.status(401).json({
-      errors: ['Token expirado ou inválido'],
-    })
+      errors: ['Expired or invalid token'],
+    });
   }
 };
