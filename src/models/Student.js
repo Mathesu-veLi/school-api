@@ -2,86 +2,90 @@ import Sequelize, { Model } from 'sequelize';
 
 export default class Student extends Model {
   static init(sequelize) {
-    super.init({
-      nome: {
-        type: Sequelize.STRING,
-        defaultValue: '',
-        validade: {
-          len: {
-            args: [3, 255],
-            msg: 'Nome precisa ter entre 3 e 255 caracteres'
+    super.init(
+      {
+        name: {
+          type: Sequelize.STRING,
+          defaultValue: '',
+          validade: {
+            len: {
+              args: [3, 255],
+              msg: 'Name must be between 3 and 255 characters',
+            },
+          },
+        },
+
+        lastName: {
+          type: Sequelize.STRING,
+          defaultValue: '',
+          validade: {
+            len: {
+              args: [3, 255],
+              msg: 'Last name must be between 3 and 255 characters',
+            },
+          },
+        },
+
+        email: {
+          type: Sequelize.STRING,
+          defaultValue: '',
+          validate: {
+            isEmail: {
+              msg: 'Invalid Email',
+            },
+
+            isUnique(value, next) {
+              Student.findOne({ where: { email: value } })
+                .then((aluno) => {
+                  if (aluno) {
+                    return next('Email already registered');
+                  }
+                  return next();
+                })
+                .catch((err) => next(err));
+            },
+          },
+        },
+
+        age: {
+          type: Sequelize.INTEGER,
+          defaultValue: '',
+          validade: {
+            isInt: {
+              msg: 'Age must be an integer',
+            },
+          },
+        },
+
+        weight: {
+          type: Sequelize.FLOAT,
+          defaultValue: '',
+          validade: {
+            isFloat: {
+              msg: 'Weight must be an integer or floating number',
+            },
+          },
+        },
+
+        height: {
+          type: Sequelize.FLOAT,
+          defaultValue: '',
+          validade: {
+            isFloat: {
+              msg: 'Height must be an integer or floating number',
+            },
           },
         },
       },
-
-      sobrenome: {
-        type: Sequelize.STRING,
-        defaultValue: '',
-        validade: {
-          len: {
-            args: [3, 255],
-            msg: 'Sobrenome precisa ter entre 3 e 255 caracteres'
-          },
-        },
+      {
+        sequelize,
       },
-
-      email: {
-        type: Sequelize.STRING,
-        defaultValue: '',
-        validate: {
-          isEmail: {
-            msg: 'Email inválido'
-          },
-
-          isUnique(value, next) {
-            Student.findOne({ where: { email: value } }).then(aluno => {
-              if (aluno) {
-                return next('Email já existe, tente outro!');
-              };
-              return next();
-            }).catch(err => next(err));
-          },
-
-        },
-      },
-
-      idade: {
-        type: Sequelize.INTEGER,
-        defaultValue: '',
-        validade: {
-          isInt: {
-            msg: 'Idade precisa ser um número inteiro'
-          },
-        },
-      },
-
-      peso: {
-        type: Sequelize.FLOAT,
-        defaultValue: '',
-        validade: {
-          isFloat: {
-            msg: 'Peso precisa ser um número inteiro ou flutuante'
-          },
-        },
-      },
-
-      altura: {
-        type: Sequelize.FLOAT,
-        defaultValue: '',
-        validade: {
-          isFloat: {
-            msg: 'Altura precisa ser um número inteiro ou flutuante'
-          },
-        },
-      },
-    }, {
-      sequelize,
-    });
+    );
 
     return this;
   };
 
   static associate(models) {
-    this.hasMany(models.Photo, { foreignKey: 'aluno_id'})
+    this.hasMany(models.Photo, { foreignKey: 'student_id'})
   }
 }
