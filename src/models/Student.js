@@ -1,6 +1,6 @@
 import Sequelize, { Model } from 'sequelize';
 
-export default class Aluno extends Model {
+export default class Student extends Model {
   static init(sequelize) {
     super.init({
       nome: {
@@ -34,7 +34,7 @@ export default class Aluno extends Model {
           },
 
           isUnique(value, next) {
-            Aluno.findOne({ where: { email: value } }).then(aluno => {
+            Student.findOne({ where: { email: value } }).then(aluno => {
               if (aluno) {
                 return next('Email já existe, tente outro!');
               };
